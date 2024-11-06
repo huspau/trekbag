@@ -8,6 +8,8 @@ import { initialItems } from "./lib/constants";
 
 function App() {
   const [items, setItems] = useState(initialItems);
+  const totalNumberOfItems = items.length;
+  const totalNumberOfPackedItems = items.filter((item) => item.packed).length;
 
   const handleAddItem = (newItemText) => {
     const newItem = {
@@ -25,7 +27,9 @@ function App() {
 
   const handleToggleItem = (id) => {
     setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, packed: !item.packed } : item))
+      prev.map((item) =>
+        item.id === id ? { ...item, packed: !item.packed } : item
+      )
     );
   };
 
@@ -49,8 +53,15 @@ function App() {
     <>
       <BackgroundHeading />
       <main>
-        <Header items={items} />
-        <ItemList items={items} handleDeleteItem={handleDeleteItem} handleToggleItem={handleToggleItem} />
+        <Header
+          totalNumberOfPackedItems={totalNumberOfPackedItems}
+          totalNumberOfItems={totalNumberOfItems}
+        />
+        <ItemList
+          items={items}
+          handleDeleteItem={handleDeleteItem}
+          handleToggleItem={handleToggleItem}
+        />
         <Sidebar
           handleAddItem={handleAddItem}
           handleRemoveAllItems={handleRemoveAllItems}
