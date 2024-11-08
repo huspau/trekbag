@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BackgroundHeading from "./BackgroundHeading";
 import Footer from "./Footer";
 import Header from "./Header";
@@ -7,7 +7,10 @@ import Sidebar from "./Sidebar";
 import { initialItems } from "./lib/constants";
 
 function App() {
-  const [items, setItems] = useState(initialItems);
+  const [items, setItems] = useState(() => {
+    const storedItems = localStorage.getItem("items");
+    return storedItems ? JSON.parse(storedItems) : initialItems;
+  });
   const totalNumberOfItems = items.length;
   const totalNumberOfPackedItems = items.filter((item) => item.packed).length;
 
@@ -48,6 +51,10 @@ function App() {
   const handleMarkAllAsIncomplete = () => {
     setItems((prev) => prev.map((item) => ({ ...item, packed: false })));
   };
+
+  useEffect(() => {
+    localStorage.setItem("items", JSON.stringify(items));
+  }, [items]);
 
   return (
     <>
